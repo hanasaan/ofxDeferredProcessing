@@ -19,11 +19,13 @@ namespace DeferredEffect {
         ofFloatColor diffuseColor;
         ofFloatColor specularColor;
         ofVec3f position;
+        float intensity = 1.0;
+        float radius = 200.0;
     };
     
     
     class DeferredLightingPass : public RenderPass {
-    private:
+    protected:
         vector<DeferredLight> lights;
         ofShader shader;
         float farClip;
@@ -43,8 +45,9 @@ namespace DeferredEffect {
             return lights[index];
         }
         void clear() { lights.clear(); }
-        
         int getLightsSize() { return lights.size(); }
+        vector<DeferredLight>& getLights() { return lights; }
+        const vector<DeferredLight>& getLights() const { return lights; }
         
         void update(ofCamera& cam);
         void render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuffer);

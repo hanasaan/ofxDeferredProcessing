@@ -94,7 +94,7 @@ DeferredLightingPass::DeferredLightingPass(const ofVec2f& sz) : RenderPass(sz, "
         if (lambert > 0.0) {
             float distance = length(lightDir);
             
-            if (distance <= u_lightRadius) {
+            if (distance <= u_lightRadius || u_lightRadius == 0.0) {
                 // different attenuation methods - we have to stay within bounding radius, so it's a bit trickier than forward rendering
                 //      float attenuation = 1.0 - distance/u_lightRadius;
                 //      float attenuation = 1.0 / (u_lightAttenuation.x + u_lightAttenuation.y * distance + u_lightAttenuation.z * distance * distance);
@@ -103,7 +103,7 @@ DeferredLightingPass::DeferredLightingPass(const ofVec2f& sz) : RenderPass(sz, "
                 //      (1-(x/r)^2)^3
                 //      float attenuation = (1.0 - pow(pow(distance/u_lightRadius, 2), 3));
                 
-                float distancePercent = distance/u_lightRadius;
+                float distancePercent = u_lightRadius == 0.0 ? 0.0 : distance/u_lightRadius;
                 float damping_factor = 1.0 - pow(distancePercent, 3.0);
                 float attenuation = 1.0/(u_lightAttenuation.x +
                                          u_lightAttenuation.y * distance +
@@ -169,8 +169,8 @@ void DeferredLightingPass::render(ofFbo& readFbo, ofFbo& writeFbo, GBuffer& gbuf
         shader.setUniform4fv("u_lightAmbient", light.ambientColor.v);
         shader.setUniform4fv("u_lightDiffuse", light.diffuseColor.v);
         shader.setUniform4fv("u_lightSpecular", light.specularColor.v);
-        shader.setUniform1f("u_lightIntensity", 1.0f);
-        shader.setUniform1f("u_lightRadius", 200.0f);
+        shader.setUniform1f("u_lightIntensity", light.intensity);
+        shader.setUniform1f("u_lightRadius", light.radius);
         texturedQuad(0, 0, size.x, size.y, size.x, size.y);
     }
     shader.end();
