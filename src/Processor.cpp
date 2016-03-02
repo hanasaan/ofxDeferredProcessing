@@ -100,12 +100,12 @@ void Processor::debugDraw()
     pingPong[currentReadFbo].draw(630, 10, 300, 300);
 }
 
-void Processor::draw(float x, float y)
+void Processor::draw(float x, float y) const
 {
     draw(x, y, width, height);
 }
 
-void Processor::draw(float x, float y, float w, float h)
+void Processor::draw(float x, float y, float w, float h) const
 {
     if (numProcessedPasses == 0) raw.draw(0, 0, w, h);
     else pingPong[currentReadFbo].draw(0, 0, w, h);

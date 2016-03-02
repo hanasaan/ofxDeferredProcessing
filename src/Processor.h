@@ -5,7 +5,7 @@
 // This code is modified from Neil Mendoza's ofxPostProcessing (BSD lisence)
 // https://github.com/neilmendoza/ofxPostProcessing
 namespace DeferredEffect {
-    using namespace tr1;
+//    using namespace tr1;
     
     class RenderPass {
     public:
@@ -48,10 +48,10 @@ namespace DeferredEffect {
         void end(bool autoDraw = true);
         
         // float rather than int and not const to override ofBaseDraws
-        void draw(float x = 0.f, float y = 0.f);
-        void draw(float x, float y, float w, float h);
-        float getWidth() { return width; }
-        float getHeight() { return height; }
+        void draw(float x = 0.f, float y = 0.f) const ;
+        void draw(float x, float y, float w, float h) const ;
+        float getWidth() const { return width; }
+        float getHeight() const { return height; }
         
         void debugDraw();
         
